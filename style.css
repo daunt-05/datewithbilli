@@ -1,0 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;500;600&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+  min-height: 100svh; /* uses small viewport height — safe on iOS Safari */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Wrapper keeps the card always centered in the viewport */
+.card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100svh;
+  position: relative;
+}
+
+.card {
+  background: white;
+  padding: 2.5rem 2rem;
+  border-radius: 24px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 550px;
+  width: 100%;
+  display: none;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card.active {
+  display: block;
+  transform: scale(1);
+  opacity: 1;
+}
+
+h1 {
+  font-family: 'Dancing Script', cursive;
+  color: #e91e63;
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+p {
+  color: #666;
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
+  margin-bottom: 2rem;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 12px 25px;
+  font-size: clamp(1rem, 3vw, 1.1rem);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  touch-action: manipulation;
+}
+
+.btn-yes {
+  background: #e91e63;
+  color: white;
+  box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+}
+
+.btn-yes:hover {
+  background: #d81b60;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
+}
+
+.btn-no {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.btn-no:hover {
+  background: #e0e0e0;
+}
+
+.btn-next {
+  background: #e91e63;
+  color: white;
+  margin-top: 15px;
+  width: 100%;
+  font-size: clamp(1rem, 3vw, 1.2rem);
+  padding: 15px;
+}
+
+/* ─── Input Fields ─── */
+.text-input {
+  padding: 15px 20px;
+  font-size: 1.1rem;
+  border: 2px solid #f8bbd0;
+  border-radius: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  background-color: #fffafb;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #e91e63;
+  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+}
+
+/* ─── Wheel Picker ─── */
+.wheel-picker-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  background: #fffafb;
+  padding: 16px 12px;
+  border-radius: 20px;
+  box-shadow: inset 0 0 10px rgba(233, 30, 99, 0.05);
+  border: 2px solid #f8bbd0;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.wheel-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 130px;
+}
+
+.wheel-label {
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  color: #e91e63;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.wheel-row {
+  display: flex;
+  gap: 8px;
+  height: 150px;
+  width: 100%;
+  justify-content: center;
+  position: relative;
+  mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 25%, black 75%, transparent);
+}
+
+.wheel-row::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  right: -4px;
+  height: 46px;
+  transform: translateY(-50%);
+  background: rgba(233, 30, 99, 0.1);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wheel-column {
+  height: 150px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  max-width: 70px;
+}
+
+.wheel-column::-webkit-scrollbar {
+  display: none;
+}
+
+.wheel-item, .wheel-spacer {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.9rem, 3vw, 1.1rem);
+  color: #888;
+  scroll-snap-align: center;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0 6px;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.wheel-spacer {
+  pointer-events: none;
+}
+
+/* ─── Food Grid ─── */
+.food-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.food-item {
+  background: #fff0f5;
+  border: 2px solid #f8bbd0;
+  padding: 12px 8px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  touch-action: manipulation;
+}
+
+.food-item.selected {
+  background: #e91e63;
+  color: white;
+  border-color: #e91e63;
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+}
+
+.food-item:hover:not(.selected) {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.food-emoji {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* ─── End Card Preview ─── */
+.preview-generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 30px;
+  color: #e91e63;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.preview-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f8bbd0;
+  border-top-color: #e91e63;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.date-card-preview {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(233, 30, 99, 0.2);
+  margin: 0 auto 20px;
+  display: block;
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.download-btn {
+  background: #ff9800;
+  color: white;
+  text-decoration: none;
+  padding: 12px 25px;
+  border-radius: 50px;
+  display: inline-block;
+  font-weight: 600;
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
+  box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+  transition: all 0.3s ease;
+  width: 100%;
+  touch-action: manipulation;
+}
+
+.download-btn:hover {
+  background: #e68a00;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 152, 0, 0.6);
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 374px) {
+  .card { padding: 1.5rem 1rem; }
+  .food-grid { grid-template-columns: repeat(2, 1fr); }
+  .wheel-group { min-width: 100px; }
+}
+
+@media (max-width: 480px) {
+  .card { padding: 1.8rem 1.2rem; border-radius: 20px; }
+  .wheel-picker-container { gap: 12px; padding: 12px 8px; }
+  .wheel-group { min-width: 110px; }
+  .food-grid { gap: 10px; }
+}
+
+@media (min-width: 768px) {
+  .card { padding: 2.5rem 2.5rem; }
+  .food-grid { gap: 15px; }
+}
