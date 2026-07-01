@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Admin Dashboard 🐾</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background: #fff0f5; padding: 20px; font-family: 'Poppins', sans-serif; }
+        .admin-container { max-width: 800px; margin: 40px auto; background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(233, 30, 99, 0.1); padding: 30px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #fce4ec; padding-bottom: 10px; }
+        .tab { padding: 10px 20px; background: white; color: #888; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .tab:hover { background: #fce4ec; color: #e91e63; }
+        .tab.active { background: #e91e63; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .date-card { border: 2px solid #fce4ec; border-radius: 12px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; background: white; transition: 0.3s; }
+        .date-card:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(233, 30, 99, 0.1); border-color: #f8bbd0; }
+        .date-card.done { opacity: 0.6; background: #fafafa; border-color: #eee; }
+        .config-item { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .input-sm { padding: 12px; border: 2px solid #fce4ec; border-radius: 8px; font-family: 'Poppins', sans-serif; font-size: 1rem; }
+        .input-sm:focus { outline: none; border-color: #e91e63; }
+    </style>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="admin-container" id="login-screen" style="text-align: center; max-width: 400px;">
+        <div style="font-size: 4rem; margin-bottom: 10px;">🔐</div>
+        <h2 style="color: #e91e63; margin-top: 0;">Admin Login</h2>
+        <p style="color: #888; margin-bottom: 20px;">Use the email and password you set up in Firebase Authentication.</p>
+        <input type="email" id="email" class="text-input" placeholder="Admin Email" style="margin-bottom: 15px;">
+        <input type="password" id="password" class="text-input" placeholder="Password" style="margin-bottom: 15px;">
+        <button class="btn-next" onclick="login()">Login</button>
+    </div>
+
+    <div class="admin-container" id="dashboard" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1 style="color: #e91e63; margin: 0;">Admin Dashboard 🐾</h1>
+            <button onclick="logout()" style="background: none; border: 2px solid #f8bbd0; border-radius: 8px; color: #e91e63; padding: 5px 15px; cursor: pointer; font-weight: 600; font-family: 'Poppins';">Logout</button>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('dates', this)">Incoming Dates 💌</div>
+            <div class="tab" onclick="switchTab('config', this)">Edit Cards & Foods 🍔</div>
+        </div>
+
+        <div id="tab-dates" class="tab-content active">
+            <div id="dates-list">Loading dates...</div>
+        </div>
+
+        <div id="tab-config" class="tab-content">
+            <h3 style="color: #e91e63;">Manage Food Options</h3>
+            <p style="color: #666; font-size: 0.9rem;">Add, edit, or delete the food items she gets to pick from. Changes save instantly to the live app!</p>
+            
+            <div id="foods-list" style="margin-top: 20px;"></div>
+            
+            <button class="btn-next" onclick="addFoodRow()" style="background: white; color: #e91e63; border: 2px dashed #e91e63; margin-top: 10px; padding: 12px; width: auto; font-size: 1rem;">+ Add New Food Option</button>
+            
+            <hr style="border: 1px solid #fce4ec; margin: 30px 0;">
+            
+            <h3 style="color: #e91e63;">Final PNG Template</h3>
+            <p style="color: #666; font-size: 0.9rem;">Choose the design she will download at the end.</p>
+            <select id="theme-selector" class="text-input" style="max-width: 300px; padding: 10px; border-radius: 8px;">
+                <option value="pink">Pink Purrfect (Default)</option>
+                <option value="dark">Elegant Dark Mode</option>
+            </select>
+            
+            <br>
+            <button class="btn-next" onclick="saveConfig()" style="margin-top: 30px; font-weight: bold; max-width: 300px;">Save Live Configuration 💾</button>
+        </div>
+    </div>
+    
+    <script src="admin.js"></script>
+</body>
+</html>
